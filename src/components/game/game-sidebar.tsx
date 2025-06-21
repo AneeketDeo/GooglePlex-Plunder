@@ -33,6 +33,7 @@ export function GameSidebar({
   collectedItems,
   leaderboard,
   onMove,
+  totalCollectibles,
 }: GameSidebarProps) {
   return (
     <aside className="w-full md:w-80 lg:w-96 bg-secondary/30 dark:bg-card flex flex-col p-4 gap-4 border-l-0 md:border-l-2 border-primary/10 h-auto md:h-screen">
@@ -55,7 +56,7 @@ export function GameSidebar({
             Collected Items
           </CardTitle>
           <CardDescription>
-            {collectedItems.length} / 5 found
+            {collectedItems.length} / {totalCollectibles} found
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-grow overflow-hidden">

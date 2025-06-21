@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
+export type GameState = "START_SCREEN" | "PLAYING" | "GAME_OVER";
+
 export type PlayerPosition = {
   x: number;
   y: number;
@@ -37,4 +39,5 @@ export type GameSidebarProps = {
   collectedItems: Collectible[];
   leaderboard: LeaderboardPlayer[];
   onMove: (dx: number, dy: number) => void;
+  totalCollectibles: number;
 };

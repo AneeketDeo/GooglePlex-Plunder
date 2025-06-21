@@ -4,7 +4,9 @@ import { useState, useEffect, useCallback } from "react";
 import { CampusMap } from "@/components/game/campus-map";
 import { GameSidebar } from "@/components/game/game-sidebar";
 import { TriviaModal } from "@/components/game/trivia-modal";
-import type { Collectible, PlayerPosition, TriviaGate } from "@/lib/types";
+import { GameStartScreen } from "@/components/game/game-start-screen";
+import { GameOverScreen } from "@/components/game/game-over-screen";
+import type { Collectible, PlayerPosition, TriviaGate, GameState } from "@/lib/types";
 import {
   initialCollectibles,
   initialMapLayout,
@@ -16,6 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2 } from "lucide-react";
 
 export function Game() {
+  const [gameState, setGameState] = useState<GameState>("START_SCREEN");
   const [mapLayout, setMapLayout] = useState(initialMapLayout);
   const [playerPosition, setPlayerPosition] = useState(initialPlayerPosition);
   const [collectibles, setCollectibles] = useState(initialCollectibles);
@@ -25,8 +28,28 @@ export function Game() {
 
   const collectedItems = collectibles.filter((c) => c.collected);
 
+  const resetGame = useCallback(() => {
+    setMapLayout(initialMapLayout);
+    setPlayerPosition(initialPlayerPosition);
+    setCollectibles(initialCollectibles);
+    setTriviaGates(initialTriviaGates);
+    setActiveTrivia(null);
+  }, []);
+
+  const handleStartGame = () => {
+    resetGame();
+    setGameState("PLAYING");
+  };
+
+  const handlePlayAgain = () => {
+    resetGame();
+    setGameState("PLAYING");
+  };
+
   const handleMove = useCallback(
     (dx: number, dy: number) => {
+      if (gameState !== 'PLAYING') return;
+
       const newPos = {
         x: playerPosition.x + dx,
         y: playerPosition.y + dy,
@@ -54,11 +77,12 @@ export function Game() {
 
       setPlayerPosition(newPos);
     },
-    [playerPosition, mapLayout, triviaGates]
+    [playerPosition, mapLayout, triviaGates, gameState]
   );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (gameState !== 'PLAYING') return;
       switch (e.key) {
         case "ArrowUp":
           handleMove(0, -1);
@@ -76,9 +100,10 @@ export function Game() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleMove]);
+  }, [handleMove, gameState]);
 
   useEffect(() => {
+    if (gameState !== 'PLAYING') return;
     const collectible = collectibles.find(
       (c) =>
         c.position.x === playerPosition.x &&
@@ -97,7 +122,17 @@ export function Game() {
         action: <CheckCircle2 className="text-green-500" />,
       });
     }
-  }, [playerPosition, collectibles, toast]);
+  }, [playerPosition, collectibles, toast, gameState]);
+  
+  useEffect(() => {
+    if (gameState !== 'PLAYING') return;
+    if (collectibles.length > 0 && collectedItems.length === collectibles.length) {
+      const timer = setTimeout(() => {
+        setGameState("GAME_OVER");
+      }, 2000); // Allow time for the final toast to be seen
+      return () => clearTimeout(timer);
+    }
+  }, [collectedItems.length, collectibles.length, gameState]);
 
   const handleTriviaSuccess = (gateId: number) => {
     setTriviaGates((prev) =>
@@ -117,6 +152,20 @@ export function Game() {
     setActiveTrivia(null);
   };
 
+  if (gameState === "START_SCREEN") {
+    return <GameStartScreen onStartGame={handleStartGame} />;
+  }
+
+  if (gameState === "GAME_OVER") {
+    return (
+      <GameOverScreen
+        score={collectedItems.length}
+        total={collectibles.length}
+        onPlayAgain={handlePlayAgain}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-background font-body overflow-hidden">
       <main className="flex-1 flex items-center justify-center p-4 md:p-8 transition-all duration-300">
@@ -131,6 +180,7 @@ export function Game() {
         collectedItems={collectedItems}
         leaderboard={leaderboardData}
         onMove={handleMove}
+        totalCollectibles={collectibles.length}
       />
       {activeTrivia && (
         <TriviaModal
