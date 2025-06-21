@@ -26,12 +26,9 @@ export function CampusMap({
 }: CampusMapProps) {
   return (
     <div
-      className="grid border-2 border-primary/20 bg-background rounded-lg shadow-xl overflow-hidden"
+      className="grid border-2 border-primary/20 bg-background rounded-lg shadow-xl overflow-hidden max-w-full max-h-full aspect-square"
       style={{
         gridTemplateColumns: `repeat(${layout[0].length}, minmax(0, 1fr))`,
-        width: "clamp(300px, 90vw, 800px)",
-        height: "clamp(300px, 90vh, 800px)",
-        aspectRatio: '1 / 1',
       }}
     >
       {layout.map((row, y) =>
