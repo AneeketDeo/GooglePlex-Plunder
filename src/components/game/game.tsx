@@ -90,7 +90,7 @@ export function Game() {
       }
 
       const targetCell = mapLayout[newPos.y][newPos.x];
-      if (targetCell === 1) return; // Wall
+      if (targetCell === 1 || targetCell === 2) return; // Wall or Building
 
       setPlayerPosition(newPos);
     },
@@ -152,20 +152,22 @@ export function Game() {
   }, [collectedItems.length, collectibles.length, gameState]);
 
   const handleTriviaSuccess = (gateId: number) => {
+    const gate = triviaGates.find((g) => g.id === gateId);
+    if (!gate) return;
+
     setTriviaGates((prev) =>
-      prev.map((gate) =>
-        gate.id === gateId ? { ...gate, unlocked: true } : gate
+      prev.map((g) =>
+        g.id === gateId ? { ...g, unlocked: true } : g
       )
     );
-    const gate = triviaGates.find((g) => g.id === gateId);
-    if (gate) {
-      setMapLayout((prevLayout) => {
-        const newLayout = prevLayout.map((row) => [...row]);
-        newLayout[gate.position.y][gate.position.x] = 0; // Unlock path
-        return newLayout;
-      });
-      setPlayerPosition(gate.position);
-    }
+
+    setMapLayout((prevLayout) => {
+      const newLayout = prevLayout.map((row) => [...row]);
+      newLayout[gate.position.y][gate.position.x] = 0; // Unlock path
+      return newLayout;
+    });
+
+    setPlayerPosition(gate.position);
     setActiveTrivia(null);
   };
 

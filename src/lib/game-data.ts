@@ -35,7 +35,7 @@ export const initialPlayerPosition: PlayerPosition = { x: 1, y: 1 };
 
 export const initialCollectibles: Collectible[] = [
   { id: 1, name: "Google Chrome Logo", position: { x: 13, y: 1 }, collected: false, icon: Chrome },
-  { id: 2, name: "Android Bot", position: { x: 7, y: 8 }, collected: false, icon: Bot },
+  { id: 2, name: "Android Bot", position: { x: 6, y: 8 }, collected: false, icon: Bot },
   { id: 3, name: "Gmail Envelope", position: { x: 1, y: 13 }, collected: false, icon: Mail },
   { id: 4, name: "YouTube Play Button", position: { x: 13, y: 11 }, collected: false, icon: Youtube },
   { id: 5, name: "Google Maps Pin", position: { x: 3, y: 8 }, collected: false, icon: Map },
@@ -44,19 +44,19 @@ export const initialCollectibles: Collectible[] = [
 export const initialTriviaGates: TriviaGate[] = [
   {
     id: 1,
-    position: { x: 7, y: 3 },
+    position: { x: 7, y: 5 },
     unlocked: false,
     question: "What was Google's original name?",
   },
   {
     id: 2,
-    position: { x: 1, y: 7 },
+    position: { x: 5, y: 7 },
     unlocked: false,
     question: "In what year was Google founded?",
   },
   {
     id: 3,
-    position: { x: 9, y: 7 },
+    position: { x: 9, y: 9 },
     unlocked: false,
     question: "What is the name of Google's parent company?",
   },
