@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useTransition } from "react";
 import { CampusMap } from "@/components/game/campus-map";
 import { GameSidebar } from "@/components/game/game-sidebar";
 import { TriviaModal } from "@/components/game/trivia-modal";
@@ -16,6 +16,7 @@ import {
 } from "@/lib/game-data";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2 } from "lucide-react";
+import { generateTriviaQuestions } from "@/ai/flows/generate-trivia-questions";
 
 export function Game() {
   const [gameState, setGameState] = useState<GameState>("START_SCREEN");
@@ -25,25 +26,41 @@ export function Game() {
   const [triviaGates, setTriviaGates] = useState(initialTriviaGates);
   const [activeTrivia, setActiveTrivia] = useState<TriviaGate | null>(null);
   const { toast } = useToast();
+  const [isGenerating, startTransition] = useTransition();
 
   const collectedItems = collectibles.filter((c) => c.collected);
 
-  const resetGame = useCallback(() => {
-    setMapLayout(initialMapLayout);
-    setPlayerPosition(initialPlayerPosition);
-    setCollectibles(initialCollectibles);
-    setTriviaGates(initialTriviaGates);
-    setActiveTrivia(null);
-  }, []);
-
   const handleStartGame = () => {
-    resetGame();
-    setGameState("PLAYING");
+    startTransition(async () => {
+      // Reset game state
+      setMapLayout(initialMapLayout);
+      setPlayerPosition(initialPlayerPosition);
+      setCollectibles(initialCollectibles.map(c => ({...c, collected: false})));
+      setActiveTrivia(null);
+      
+      try {
+        const { questions } = await generateTriviaQuestions();
+        const newTriviaGates = initialTriviaGates.map((gate) => {
+          const newQuestion = questions.find((q) => q.id === gate.id);
+          return { ...gate, unlocked: false, question: newQuestion ? newQuestion.question : gate.question };
+        });
+        setTriviaGates(newTriviaGates);
+      } catch (e) {
+        console.error("Failed to generate questions", e);
+        toast({
+          title: "Couldn't fetch new questions",
+          description: "Using default questions.",
+          variant: "destructive"
+        });
+        setTriviaGates(initialTriviaGates.map(g => ({...g, unlocked: false})));
+      }
+
+      setGameState("PLAYING");
+    });
   };
 
   const handlePlayAgain = () => {
-    resetGame();
-    setGameState("PLAYING");
+    handleStartGame();
   };
 
   const handleMove = useCallback(
@@ -153,7 +170,7 @@ export function Game() {
   };
 
   if (gameState === "START_SCREEN") {
-    return <GameStartScreen onStartGame={handleStartGame} />;
+    return <GameStartScreen onStartGame={handleStartGame} isGenerating={isGenerating} />;
   }
 
   if (gameState === "GAME_OVER") {
@@ -162,6 +179,7 @@ export function Game() {
         score={collectedItems.length}
         total={collectibles.length}
         onPlayAgain={handlePlayAgain}
+        isGenerating={isGenerating}
       />
     );
   }

@@ -2,14 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Gamepad2 } from "lucide-react";
+import { Gamepad2, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 type GameStartScreenProps = {
   onStartGame: () => void;
+  isGenerating?: boolean;
 };
 
-export function GameStartScreen({ onStartGame }: GameStartScreenProps) {
+export function GameStartScreen({ onStartGame, isGenerating }: GameStartScreenProps) {
   return (
     <div className="flex items-center justify-center h-screen bg-background">
       <motion.div
@@ -31,8 +32,13 @@ export function GameStartScreen({ onStartGame }: GameStartScreenProps) {
             <p className="text-muted-foreground">
               Navigate the map using your arrow keys, solve trivia to unlock new areas, and collect all the Google-themed Easter Eggs.
             </p>
-            <Button onClick={onStartGame} size="lg" className="w-full">
-              Start Game
+            <Button onClick={onStartGame} size="lg" className="w-full" disabled={isGenerating}>
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating new adventure...
+                </>
+              ) : "Start Game"}
             </Button>
           </CardContent>
         </Card>

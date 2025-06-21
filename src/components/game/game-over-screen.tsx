@@ -2,16 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy } from "lucide-react";
+import { Trophy, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 type GameOverScreenProps = {
   score: number;
   total: number;
   onPlayAgain: () => void;
+  isGenerating?: boolean;
 };
 
-export function GameOverScreen({ score, total, onPlayAgain }: GameOverScreenProps) {
+export function GameOverScreen({ score, total, onPlayAgain, isGenerating }: GameOverScreenProps) {
   return (
     <div className="flex items-center justify-center h-screen bg-background">
        <motion.div
@@ -33,8 +34,13 @@ export function GameOverScreen({ score, total, onPlayAgain }: GameOverScreenProp
              <p className="text-2xl font-bold">
               You collected {score} out of {total} Easter Eggs!
             </p>
-            <Button onClick={onPlayAgain} size="lg" className="w-full">
-              Play Again
+            <Button onClick={onPlayAgain} size="lg" className="w-full" disabled={isGenerating}>
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Preparing new game...
+                </>
+              ) : "Play Again"}
             </Button>
           </CardContent>
         </Card>
