@@ -34,10 +34,10 @@ export const initialMapLayout: number[][] = [
 export const initialPlayerPosition: PlayerPosition = { x: 1, y: 1 };
 
 export const initialCollectibles: Collectible[] = [
-  { id: 1, name: "Google Chrome Logo", position: { x: 4, y: 2 }, collected: false, icon: Chrome },
+  { id: 1, name: "Google Chrome Logo", position: { x: 4, y: 1 }, collected: false, icon: Chrome },
   { id: 2, name: "Android Bot", position: { x: 12, y: 4 }, collected: false, icon: Bot },
   { id: 3, name: "Gmail Envelope", position: { x: 2, y: 9 }, collected: false, icon: Mail },
-  { id: 4, name: "YouTube Play Button", position: { x: 10, y: 12 }, collected: false, icon: Youtube },
+  { id: 4, name: "YouTube Play Button", position: { x: 10, y: 11 }, collected: false, icon: Youtube },
   { id: 5, name: "Google Maps Pin", position: { x: 6, y: 8 }, collected: false, icon: Map },
 ];
 
