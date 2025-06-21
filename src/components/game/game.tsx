@@ -81,9 +81,6 @@ export function Game() {
         return;
       }
 
-      const targetCell = mapLayout[newPos.y][newPos.x];
-      if (targetCell === 1) return; // Wall
-
       const triviaGate = triviaGates.find(
         (g) => g.position.x === newPos.x && g.position.y === newPos.y
       );
@@ -91,6 +88,9 @@ export function Game() {
         setActiveTrivia(triviaGate);
         return;
       }
+
+      const targetCell = mapLayout[newPos.y][newPos.x];
+      if (targetCell === 1) return; // Wall
 
       setPlayerPosition(newPos);
     },

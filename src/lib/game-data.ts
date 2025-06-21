@@ -19,8 +19,8 @@ export const initialMapLayout: number[][] = [
   [1, 0, 2, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 0, 0, 0, 1, 0, 2, 0, 1, 1, 0, 1, 1, 1],
+  [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+  [1, 1, 0, 0, 0, 1, 0, 2, 0, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
   [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
   [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
@@ -34,7 +34,7 @@ export const initialMapLayout: number[][] = [
 export const initialPlayerPosition: PlayerPosition = { x: 1, y: 1 };
 
 export const initialCollectibles: Collectible[] = [
-  { id: 1, name: "Google Chrome Logo", position: { x: 3, y: 1 }, collected: false, icon: Chrome },
+  { id: 1, name: "Google Chrome Logo", position: { x: 6, y: 1 }, collected: false, icon: Chrome },
   { id: 2, name: "Android Bot", position: { x: 7, y: 8 }, collected: false, icon: Bot },
   { id: 3, name: "Gmail Envelope", position: { x: 1, y: 9 }, collected: false, icon: Mail },
   { id: 4, name: "YouTube Play Button", position: { x: 10, y: 10 }, collected: false, icon: Youtube },
@@ -50,13 +50,13 @@ export const initialTriviaGates: TriviaGate[] = [
   },
   {
     id: 2,
-    position: { x: 3, y: 7 },
+    position: { x: 5, y: 7 },
     unlocked: false,
     question: "In what year was Google founded?",
   },
   {
     id: 3,
-    position: { x: 11, y: 7 },
+    position: { x: 12, y: 7 },
     unlocked: false,
     question: "What is the name of Google's parent company?",
   },
